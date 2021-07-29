@@ -22,4 +22,6 @@ public interface StudentService {
     int modifyStudent(Student s);
 
     int delStudentById(int stuid);
+
+    boolean stuNoExisted(String stuno);
 }

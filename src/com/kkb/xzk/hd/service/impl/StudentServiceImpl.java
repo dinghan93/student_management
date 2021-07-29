@@ -47,4 +47,9 @@ public class StudentServiceImpl implements StudentService {
     public int delStudentById(int stuid) {
         return sd.delStudentById(stuid);
     }
+
+    @Override
+    public boolean stuNoExisted(String stuno) {
+        return sd.stuNoExisted(stuno);
+    }
 }

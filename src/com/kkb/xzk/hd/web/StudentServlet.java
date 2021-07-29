@@ -26,6 +26,7 @@ import java.util.List;
  */
 @WebServlet(urlPatterns = "/Educational/student/stuOperation")
 public class StudentServlet extends HttpServlet {
+    private StudentService studentService = new StudentServiceImpl();
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String method = req.getParameter("method");
@@ -37,8 +38,23 @@ public class StudentServlet extends HttpServlet {
             getById(req, resp);
         }else if("update".equals(method)){
             update(req, resp);
+        }else if("validateStuNo".equals(method)){
+            validate(req,resp);
         }else{
             getAll(req, resp);
+        }
+    }
+
+    protected void validate(HttpServletRequest req, HttpServletResponse resp) throws IOException{
+        String stuno = req.getParameter("stuno");
+
+        boolean f = studentService.stuNoExisted(stuno);
+        resp.setContentType("text/html;charset=utf-8");
+        PrintWriter pw = resp.getWriter();
+        if(f){ //学号已经存在，返回wrong
+            pw.print("wrong");
+        }else{
+            pw.print("right");
         }
     }
 
@@ -60,7 +76,7 @@ public class StudentServlet extends HttpServlet {
         int gid = Integer.parseInt(req.getParameter("gid"));
 
         Student student = new Student(0, stuname, stuno, sex, phone, email, registered, address, profession, idnumber, politics, new Date(regdate.getTime()), state, introduction, gid, null);
-        StudentService studentService = new StudentServiceImpl();
+
         int i = studentService.insertStudent(student);
         resp.setContentType("text/html;charset=utf-8");
         PrintWriter pw = resp.getWriter();
@@ -73,7 +89,6 @@ public class StudentServlet extends HttpServlet {
 
     protected void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int stuid = Integer.parseInt(req.getParameter("stuid"));
-        StudentService studentService = new StudentServiceImpl();
         int i = studentService.delStudentById(stuid);
         resp.setContentType("text/html;charset=utf-8");
         PrintWriter pw = resp.getWriter();
@@ -87,7 +102,6 @@ public class StudentServlet extends HttpServlet {
     protected void getById(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int stuid = Integer.parseInt(req.getParameter("stuid"));
 
-        StudentService studentService = new StudentServiceImpl();
         GradeService gradeService = new GradeServiceImpl();
         Student s = studentService.getStudentById(stuid);
         req.setAttribute("stu", s);
@@ -110,8 +124,6 @@ public class StudentServlet extends HttpServlet {
         PageUtil pageUtil = new PageUtil();
         pageUtil.setPageIndex(index);
         //2. 调用service服务
-
-        StudentService studentService = new StudentServiceImpl();
 
         List<Student> students = studentService.getAllStudents(stuno, stuname, sex, index,5);
         int total = studentService.getNum(stuno, stuname, sex);
@@ -147,7 +159,7 @@ public class StudentServlet extends HttpServlet {
         int gid = Integer.parseInt(req.getParameter("gid"));
 
         Student student = new Student(stuid, stuname, stuno, sex, phone, email, registered, address, profession, idnumber, politics, new Date(regdate.getTime()), state, introduction, gid, null);
-        StudentService studentService = new StudentServiceImpl();
+
         int i = studentService.modifyStudent(student);
         resp.setContentType("text/html;charset=utf-8");
         PrintWriter pw = resp.getWriter();

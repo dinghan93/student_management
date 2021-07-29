@@ -173,4 +173,29 @@ public class StudentDaoImpl extends DBUtils implements StudentDao {
         }
         return i;
     }
+
+    @Override
+    public boolean stuNoExisted(String stuno) {
+        String sql = "select count(*) from student where stuno=?";
+        List<Object> params = new ArrayList<>();
+        params.add(stuno);
+        int result = 0;
+        try {
+            resultSet = query(sql, params);
+            result = 0;
+            while(resultSet.next()){
+                result = resultSet.getInt(1);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            closeAll();
+        }
+        if(result > 0){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
 }

@@ -17,4 +17,5 @@ public interface StudentDao {
     Student getStudentById(int stuid);
     int modifyStudent(Student s);
     int delStudentById(int stuid);
+    boolean stuNoExisted(String stuno);
 }

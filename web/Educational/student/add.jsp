@@ -14,7 +14,37 @@
     <script src="../../Script/Common.js" type="text/javascript"></script>
     <script src="../../Script/Data.js" type="text/javascript"></script>
     
+    <script>
+        var flag = false;
+        $(function(){
+            $("#stuno").blur(function(){
+                var stuno = $(this).val();
+                $.ajax({
+                    url:"/Educational/student/stuOperation?method=validateStuNo",
+                    data:"stuno="+stuno,
+                    type:"get",
+                    success: function(rs){
+                        if(rs=='wrong'){
+                            alert('学号无效！');
+                            flag = false;
+                        }else{
+                            flag = true;
+                        }
+                    },
+                    dataType: "text"
+                });
+            });
 
+            $("#myForm").submit(function(){
+                if(flag==false){
+                    alert("学号已存在，请检查后重新输入！")
+                }else{
+                    return true;
+                }
+            });
+        });
+
+    </script>
 </head>
 <body>
 
@@ -26,12 +56,12 @@
         </div>
 </div>
 <div class="cztable">
-    <form action="/Educational/student/stuOperation?method=add" method="post">
+    <form id="myForm" action="/Educational/student/stuOperation?method=add" method="post">
 	<table border="1" width="100%" class="table_a">
                 <tr  width="120px;">
                     <td width="10%">学号<span style="color:red">*</span>：</td>
                     <td>
-						<input type="text"  name="stuno" value="" required/>
+						<input type="text" id="stuno" name="stuno" value="" required/>
 					</td>
                 </tr>
 
