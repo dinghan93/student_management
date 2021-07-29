@@ -85,10 +85,10 @@
                     <tr>
                         <td colspan="20" style="text-align: center;">						
 							<a style="text-decoration: none;" href="/Educational/student/stuOperation?stuname=${stuname}&stuno=${stuno}&sex=${sex}">首页</a>
-							<a style="text-decoration: none;" href="/Educational/student/stuOperation?pageIndex=${index-1<1?1:index-1}&stuname=${stuname}&stuno=${stuno}&sex=${sex}">上一页</a>
-							<a style="text-decoration: none;" href="/Educational/student/stuOperation?pageIndex=${index+1>totalPages?totalPages:index+1}&stuname=${stuname}&stuno=${stuno}&sex=${sex}">下一页</a>
-							<a style="text-decoration: none;" href="/Educational/student/stuOperation?pageIndex=${totalPages}&stuname=${stuname}&stuno=${stuno}&sex=${sex}">尾页</a>
-							共${total}条 每页显示 ${index}/${totalPages}
+							<a style="text-decoration: none;" href="/Educational/student/stuOperation?pageIndex=${p1.pageIndex-1<1?1:p1.pageIndex-1}&stuname=${stuname}&stuno=${stuno}&sex=${sex}">上一页</a>
+							<a style="text-decoration: none;" href="/Educational/student/stuOperation?pageIndex=${p1.pageIndex+1>p1.totalPages?p1.totalPages:p1.pageIndex+1}&stuname=${stuname}&stuno=${stuno}&sex=${sex}">下一页</a>
+							<a style="text-decoration: none;" href="/Educational/student/stuOperation?pageIndex=${p1.totalPages}&stuname=${stuname}&stuno=${stuno}&sex=${sex}">尾页</a>
+							共${p1.total}条 每页显示 ${p1.pageIndex}/${p1.totalPages}
                         </td>
                     </tr>
                 </tbody>

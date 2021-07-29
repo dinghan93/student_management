@@ -6,6 +6,7 @@ import com.kkb.xzk.hd.service.GradeService;
 import com.kkb.xzk.hd.service.StudentService;
 import com.kkb.xzk.hd.service.impl.GradeServiceImpl;
 import com.kkb.xzk.hd.service.impl.StudentServiceImpl;
+import com.kkb.xzk.hd.util.PageUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -105,22 +106,23 @@ public class StudentServlet extends HttpServlet {
         int sex = (sexString==null || "".equals(sexString))? -1 : Integer.parseInt(sexString);
         String pageIndex = req.getParameter("pageIndex");
         int index = (pageIndex==null||"".equals(pageIndex)) ? 1 : Integer.parseInt(req.getParameter("pageIndex"));
+
+        PageUtil pageUtil = new PageUtil();
+        pageUtil.setPageIndex(index);
         //2. 调用service服务
 
         StudentService studentService = new StudentServiceImpl();
+
         List<Student> students = studentService.getAllStudents(stuno, stuname, sex, index,5);
         int total = studentService.getNum(stuno, stuname, sex);
-        int itemsInEachPage = students.size();
-        int totalPages = total%5==0 ? total/5 : total/5+1;
+        pageUtil.setTotal(total);
 
         req.setAttribute("students", students);
         req.setAttribute("stuname", stuname);
         req.setAttribute("stuno", stuno);
         req.setAttribute("sex", sex);
-        req.setAttribute("total", total);
-        req.setAttribute("totalPages", totalPages);
-        req.setAttribute("index", index);
-        req.setAttribute("itemsInEachPage", itemsInEachPage);
+        req.setAttribute("p1", pageUtil);
+
 
         //3. 页面跳转
         req.getRequestDispatcher("list.jsp").forward(req,resp);
