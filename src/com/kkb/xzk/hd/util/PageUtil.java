@@ -1,5 +1,7 @@
 package com.kkb.xzk.hd.util;
 
+import java.util.List;
+
 /**
  * @Author: HanDing
  * @Description: 封装关于分页显示的信息
@@ -11,10 +13,18 @@ public class PageUtil {
     private int totalPages; //总页数
     private int pageIndex; //当前页码
     private int pageSize = 5; //每页显示的数据个数
+    private List dataList;
 
     public PageUtil() {
     }
 
+    public void setDataList(List dataList) {
+        this.dataList = dataList;
+    }
+
+    public List getDataList() {
+        return dataList;
+    }
 
     public int getTotal() {
         return total;
