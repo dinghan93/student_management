@@ -28,10 +28,15 @@
                             <td style="font-weight: bold; font-size: 16px">${u1.loginname}</td>
 						</tr>
                         <tr>
-                            <td>欢迎进入网站管理中心！</td></tr></table></td>
-						</tr>
+                            <td>欢迎进入网站管理中心！</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
             <tr>
-         <td colspan=3 height=10></td></tr></table>
+                <td colspan=3 height=10></td>
+            </tr>
+        </table>
        
     </body>
 </html>
