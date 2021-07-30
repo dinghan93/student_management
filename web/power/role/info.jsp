@@ -49,10 +49,16 @@
                                             <c:set var="flag" value="true"></c:set>
                                         </c:if>
                                     </c:forEach>
-                                    <input type="checkbox" ${flag==true?'checked':''} name="menuid" class="pMenu" value="${m.menuid}" readonly/>${m.menuname}
+                                    <input type="checkbox" ${flag==true?'checked':''} name="menuid" class="pMenu" value="${m.menuid}" onclick="return false"/>${m.menuname}
                                     <ul>
                                         <c:forEach items="${m.subMenus}" var="sub">
-                                            <li>&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" ${flag==true?'checked':''} name="menuid" class="sMenu" value="${sub.menuid}" readonly/>${sub.menuname}</li>
+                                            <c:set var="flag" value="false"></c:set>
+                                            <c:forEach items="${role.menuList}" var="ml">
+                                                <c:if test="${ml.menuid==sub.menuid}">
+                                                    <c:set var="flag" value="true"></c:set>
+                                                </c:if>
+                                            </c:forEach>
+                                            <li>&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" ${flag==true?'checked':''} name="menuid" class="sMenu" value="${sub.menuid}" onclick="return false"/>${sub.menuname}</li>
                                         </c:forEach>
                                     </ul>
                                 </li>
@@ -64,7 +70,7 @@
                 <tr>
                     <td>启用状态<span style="color:red">*</span>：</td>
                     <td>
-                        <input type="radio" name="state" ${role.rolestate==1?'checked':''} value="1" readonly/>启用 <input type="radio" name="state" ${role.rolestate==0?'checked':''} value="0" readonly/>禁用
+                        <input type="radio" name="state" ${role.rolestate==1?'checked':''} value="1" onclick="return false"/>启用 <input type="radio" name="state" ${role.rolestate==0?'checked':''} value="0" onclick="return false"/>禁用
                     </td>
                 </tr>
 				

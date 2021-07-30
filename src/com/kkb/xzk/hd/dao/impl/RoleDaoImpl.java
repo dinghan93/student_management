@@ -32,13 +32,6 @@ public class RoleDaoImpl extends DBUtils implements RoleDao {
         try {
             resultSet = query(sql, params);
             roleList = ResultSetUtil.getResults(resultSet, Role.class);
-//            while(resultSet.next()){
-//                Role role = new Role();
-//                role.setRolename(resultSet.getString("rolename"));
-//                role.setRoleid(resultSet.getInt("roleid"));
-//                role.setRolestate(resultSet.getInt("rolestate"));
-//                roleList.add(role);
-//            }
         } catch (Exception throwables) {
             throwables.printStackTrace();
         } finally {
@@ -68,8 +61,9 @@ public class RoleDaoImpl extends DBUtils implements RoleDao {
     public int addRole(Role role) {
         int key = 0;;
         try {
-            String sql = "insert into role(rolename, rolestate) values(?,?)";
+            String sql = "insert into role(roleid, rolename, rolestate) values(?,?,?)";
             List params = new ArrayList();
+            params.add(role.getRoleid());
             params.add(role.getRolename());
             params.add(role.getRolestate());
             int k = update(sql, params);
@@ -111,5 +105,28 @@ public class RoleDaoImpl extends DBUtils implements RoleDao {
         }
         role.setMenuList(menuList);
         return role;
+    }
+
+    @Override
+    public int deleteRowById(int roleid) {
+        try {
+            String sql = "delete from role where roleid=?";
+            List params = new ArrayList();
+            params.add(roleid);
+            int i = update(sql, params);
+
+            sql = "delete from middle where roleid=?";
+            int k = update(sql, params);
+            if(i > 0 || k > 0){
+                return 1;
+            }else{
+                return 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            closeAll();
+        }
+        return 0;
     }
 }

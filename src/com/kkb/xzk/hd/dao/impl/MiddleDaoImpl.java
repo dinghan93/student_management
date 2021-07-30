@@ -20,10 +20,12 @@ public class MiddleDaoImpl extends DBUtils implements MiddleDao {
         String sql = "insert into middle(roleid, menuid) values(?, ?)";
         try {
             pps = getConnection().prepareStatement(sql);
-            for (String menuid : menuids) {
-                pps.setInt(1,roleid);
-                pps.setString(2,menuid);
-                pps.addBatch();
+            if(menuids != null && menuids.length>0) {
+                for (String menuid : menuids) {
+                    pps.setInt(1, roleid);
+                    pps.setString(2, menuid);
+                    pps.addBatch();
+                }
             }
             pps.executeBatch();
             count = 1;

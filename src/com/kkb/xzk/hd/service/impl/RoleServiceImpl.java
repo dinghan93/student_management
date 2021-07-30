@@ -29,11 +29,15 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public int addRole(String rolename, int state, String[] menuids) {
+    public int addRole(int roleid, String rolename, int state, String[] menuids) {
         Role role = new Role();
         role.setRolename(rolename);
         role.setRolestate(state);
-        int roleid = roleDao.addRole(role);
+        if(roleid > 0){
+            role.setRoleid(roleid);
+        }
+        roleid = roleDao.addRole(role);
+
         int i = middleDao.insertMiddle(roleid, menuids);
         return i;
     }
@@ -41,5 +45,20 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role getRoleById(int roleid) {
         return roleDao.getRoleById(roleid);
+    }
+
+    @Override
+    public int deleteRoleById(int roleid) {
+        return roleDao.deleteRowById(roleid);
+    }
+
+    @Override
+    public int updateRole(int roleid, String rolename, int state, String[] menuids) {
+        int i = roleDao.deleteRowById(roleid);
+        //System.out.println("删除成功");
+        if(i == 0){
+            return 0;
+        }
+        return addRole(roleid, rolename, state, menuids);
     }
 }

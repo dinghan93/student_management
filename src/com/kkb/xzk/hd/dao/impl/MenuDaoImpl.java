@@ -17,21 +17,35 @@ import java.util.List;
 public class MenuDaoImpl extends DBUtils implements MenuDao {
     @Override
     public List<Menu> getMenuList() {
-        String sql = "select * from menu";
-        resultSet = query(sql, null);
-        List<Menu> menuList = ResultSetUtil.getResults(resultSet, Menu.class);
-        return menuList;
+        try {
+            String sql = "select * from menu";
+            resultSet = query(sql, null);
+            List<Menu> menuList = ResultSetUtil.getResults(resultSet, Menu.class);
+            return menuList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            closeAll();
+        }
+        return null;
     }
     @Override
     public Menu getMenuById(int menuid) {
-        String sql = "select * from menu where menuid=?";
-        List params = new ArrayList();
-        params.add(menuid);
-        resultSet = query(sql, params);
-        List<Menu> menuList = ResultSetUtil.getResults(resultSet, Menu.class);
-        if(menuList.size()==0){
-            return null;
+        try {
+            String sql = "select * from menu where menuid=?";
+            List params = new ArrayList();
+            params.add(menuid);
+            resultSet = query(sql, params);
+            List<Menu> menuList = ResultSetUtil.getResults(resultSet, Menu.class);
+            if(menuList.size()==0){
+                return null;
+            }
+            return menuList.get(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            closeAll();
         }
-        return menuList.get(0);
+        return null;
     }
 }

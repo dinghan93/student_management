@@ -14,7 +14,11 @@ public interface RoleService {
     List<Role> getRoleList(int pageIndex, int pageSize);
     int total();
 
-    int addRole(String rolename, int state, String[] menuids);
+    int addRole(int roleid, String rolename, int state, String[] menuids);
 
     Role getRoleById(int roleid);
+
+    int deleteRoleById(int roleid);
+
+    int updateRole(int roleid, String rolename, int state, String[] menuids);
 }
