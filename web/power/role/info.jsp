@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix='c' uri="http://java.sun.com/jsp/jstl/core" %>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>
 	学生信息管理平台
@@ -30,9 +31,9 @@
 	<form action="list.jsp" method="post">
 <table border="1" width="100%" class="table_a">
                 <tr  width="120px;">
-                    <td width="120px">角色名：<span style="color:red">*</span>：</td>
+                    <td width="120px">角色名<span style="color:red">*</span>：</td>
                     <td>
-						<input type="text"  name="f_goods_image" value="管理员" />
+						<input type="text"  name="rolename" value="${role.rolename}" readonly/>
 					</td>
                 </tr>
 
@@ -40,15 +41,22 @@
                     <td>菜单资源<span style="color:red">*</span>：</td>
                     <td>
 						<ul>
-                        	<li><input type="checkbox" name="menu"  />权限管理
-                            	<ul>
-                                	<li>&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="menu"  />人员管理</li>
-                                    <li>&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="menu"  />角色管理</li>
-                                    <li>&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="menu"  />菜单管理</li>
-                                </ul>
-                            </li>
-                            <li><input type="checkbox" name="menu"  />个人中心</li>
-                            <li><input type="checkbox" name="menu"  />教务中心</li>
+                            <c:forEach items="${menuList}" var="m">
+                                <li>
+                                    <c:set var="flag" value="false"></c:set>
+                                    <c:forEach items="${role.menuList}" var="ml">
+                                        <c:if test="${ml.menuid==m.menuid}">
+                                            <c:set var="flag" value="true"></c:set>
+                                        </c:if>
+                                    </c:forEach>
+                                    <input type="checkbox" ${flag==true?'checked':''} name="menuid" class="pMenu" value="${m.menuid}" readonly/>${m.menuname}
+                                    <ul>
+                                        <c:forEach items="${m.subMenus}" var="sub">
+                                            <li>&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" ${flag==true?'checked':''} name="menuid" class="sMenu" value="${sub.menuid}" readonly/>${sub.menuname}</li>
+                                        </c:forEach>
+                                    </ul>
+                                </li>
+                            </c:forEach>
                         </ul>
 					</td>
                 </tr>
@@ -56,7 +64,7 @@
                 <tr>
                     <td>启用状态<span style="color:red">*</span>：</td>
                     <td>
-                        <input type="radio" name="state" checked value="1" />启用 <input type="radio" name="state" value="0"/>禁用
+                        <input type="radio" name="state" ${role.rolestate==1?'checked':''} value="1" readonly/>启用 <input type="radio" name="state" ${role.rolestate==0?'checked':''} value="0" readonly/>禁用
                     </td>
                 </tr>
 				

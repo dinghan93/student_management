@@ -12,4 +12,6 @@ import java.util.List;
  */
 public interface MenuDao {
     List<Menu> getMenuList();
+
+    Menu getMenuById(int menuid);
 }

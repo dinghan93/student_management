@@ -3,10 +3,8 @@ package com.kkb.xzk.hd.web;
 import com.kkb.xzk.hd.bean.Menu;
 import com.kkb.xzk.hd.bean.Role;
 import com.kkb.xzk.hd.service.MenuService;
-import com.kkb.xzk.hd.service.MiddleService;
 import com.kkb.xzk.hd.service.RoleService;
 import com.kkb.xzk.hd.service.impl.MenuServiceImpl;
-import com.kkb.xzk.hd.service.impl.MiddleServiceImpl;
 import com.kkb.xzk.hd.service.impl.RoleServiceImpl;
 import com.kkb.xzk.hd.util.PageUtil;
 
@@ -28,6 +26,7 @@ import java.util.List;
 @WebServlet(urlPatterns = {"/power/role/roleOperation"})
 public class RoleServlet extends HttpServlet {
     RoleService roleService = new RoleServiceImpl();
+    MenuService menuService = new MenuServiceImpl();
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String method = req.getParameter("method");
@@ -37,7 +36,24 @@ public class RoleServlet extends HttpServlet {
             selectMenus(req, resp);
         }else if("add".equals(method)){
             add(req, resp);
+        }else if("showInfo".equals(method)){
+            showInfo(req, resp);
         }
+    }
+
+    protected void showInfo(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int roleid = Integer.parseInt(req.getParameter("roleid"));
+
+        //主键查询
+        Role role = roleService.getRoleById(roleid);
+
+        //得到所有的角色列表
+        List<Menu> menuList = menuService.getMenuList();
+
+        req.setAttribute("menuList", menuList);
+        req.setAttribute("role",role);
+
+        req.getRequestDispatcher("info.jsp").forward(req, resp);
     }
 
     protected void add(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -45,9 +61,7 @@ public class RoleServlet extends HttpServlet {
         Integer state = Integer.parseInt(req.getParameter("state"));
         String[] menuids = req.getParameterValues("menuid");
 
-        int roleid = roleService.addRole(rolename, state);
-        MiddleService middleService = new MiddleServiceImpl();
-        int affectedRows = middleService.insertMiddle(roleid, menuids);
+        int affectedRows = roleService.addRole(rolename, state, menuids);
 
         resp.setContentType("text/html;charset=utf-8");
         PrintWriter pw = resp.getWriter();
@@ -73,7 +87,6 @@ public class RoleServlet extends HttpServlet {
     }
 
     protected void selectMenus(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        MenuService menuService = new MenuServiceImpl();
         List<Menu> menuList = menuService.getMenuList();
         req.setAttribute("menuList", menuList);
         req.getRequestDispatcher("add.jsp").forward(req, resp);

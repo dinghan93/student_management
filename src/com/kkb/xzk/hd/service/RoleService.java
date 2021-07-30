@@ -14,5 +14,7 @@ public interface RoleService {
     List<Role> getRoleList(int pageIndex, int pageSize);
     int total();
 
-    int addRole(String rolename, int state);
+    int addRole(String rolename, int state, String[] menuids);
+
+    Role getRoleById(int roleid);
 }

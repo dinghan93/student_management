@@ -21,4 +21,6 @@ public interface RoleDao {
      * @return 返回用户的id值
      **/
     int addRole(Role role);
+
+    Role getRoleById(int roleid);
 }
