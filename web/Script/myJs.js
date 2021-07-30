@@ -19,4 +19,5 @@ $(function(){
         }
         all.prop("checked", true);
     });
+
 });

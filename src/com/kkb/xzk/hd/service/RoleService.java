@@ -13,4 +13,6 @@ import java.util.List;
 public interface RoleService {
     List<Role> getRoleList(int pageIndex, int pageSize);
     int total();
+
+    int addRole(String rolename, int state);
 }

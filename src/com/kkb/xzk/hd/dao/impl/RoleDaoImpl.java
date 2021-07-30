@@ -4,7 +4,9 @@ import com.kkb.xzk.hd.bean.Role;
 import com.kkb.xzk.hd.bean.Users;
 import com.kkb.xzk.hd.dao.RoleDao;
 import com.kkb.xzk.hd.util.DBUtils;
+import com.kkb.xzk.hd.util.ResultSetUtil;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,14 +28,15 @@ public class RoleDaoImpl extends DBUtils implements RoleDao {
         params.add(pageSize);
         try {
             resultSet = query(sql, params);
-            while(resultSet.next()){
-                Role role = new Role();
-                role.setRolename(resultSet.getString("rolename"));
-                role.setRoleid(resultSet.getInt("roleid"));
-                role.setRolestate(resultSet.getInt("rolestate"));
-                roleList.add(role);
-            }
-        } catch (SQLException throwables) {
+            roleList = ResultSetUtil.getResults(resultSet, Role.class);
+//            while(resultSet.next()){
+//                Role role = new Role();
+//                role.setRolename(resultSet.getString("rolename"));
+//                role.setRoleid(resultSet.getInt("roleid"));
+//                role.setRolestate(resultSet.getInt("rolestate"));
+//                roleList.add(role);
+//            }
+        } catch (Exception throwables) {
             throwables.printStackTrace();
         } finally {
             closeAll();
@@ -56,5 +59,26 @@ public class RoleDaoImpl extends DBUtils implements RoleDao {
             closeAll();
         }
         return count;
+    }
+
+    @Override
+    public int addRole(Role role) {
+        int key = 0;;
+        try {
+            String sql = "insert into role(rolename, rolestate) values(?,?)";
+            List params = new ArrayList();
+            params.add(role.getRolename());
+            params.add(role.getRolestate());
+            int k = update(sql, params);
+            ResultSet rs = pps.getGeneratedKeys();
+            if(rs.next()){
+                key = rs.getInt(1);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            closeAll();
+        }
+        return key;
     }
 }

@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>
 	学生信息管理平台
@@ -7,11 +8,34 @@
 	<link href="../../Script/jBox/Skins/Blue/jbox.css" rel="stylesheet" type="text/css" />
 	<link href="../../Style/ks.css" rel="stylesheet" type="text/css" />
 	<link href="../../css/mine.css" type="text/css" rel="stylesheet">
-    <script src="../../Script/jBox/jquery-1.4.2.min.js" type="text/javascript"></script>
+    <script src="../../Script/jBox/jquery-1.8.0.min.js" type="text/javascript"></script>
     <script src="../../Script/jBox/jquery.jBox-2.3.min.js" type="text/javascript"></script>
     <script src="../../Script/jBox/i18n/jquery.jBox-zh-CN.js" type="text/javascript"></script>
     <script src="../../Script/Common.js" type="text/javascript"></script>
     <script src="../../Script/Data.js" type="text/javascript"></script>
+    <script>
+        $(function(){
+            $("input.pMenu").click(function(){
+                var flag = $(this).prop("checked");
+                var oneList = $(this).parent('li').find("input.sMenu");
+                for(var i = 0; i < oneList.length; i++){
+                    $(oneList[i]).prop("checked", flag);
+                }
+            });
+
+            $("input.sMenu").click(function(){
+                var parent = $(this).parent().parent().siblings("input");
+                var oneArray = parent.parent().find('input.sMenu');
+                for(var i = 0; i < oneArray.length; i++){
+                    if($(oneArray[i]).prop("checked")==false){
+                        parent.prop("checked",false);
+                        return;
+                    }
+                }
+                parent.prop("checked",true);
+            });
+        });
+    </script>
     
     
 </head>
@@ -27,12 +51,12 @@
         </div>
 </div>
 <div class="cztable">
-	<form action="list.jsp" method="post">
+	<form action="/power/role/roleOperation?method=add" method="post">
 <table border="1" width="100%" class="table_a">
                 <tr  width="120px;">
-                    <td width="120px">角色名：<span style="color:red">*</span>：</td>
+                    <td width="120px">角色名<span style="color:red">*</span>：</td>
                     <td>
-						<input type="text"  name="f_goods_image" value="管理员" />
+						<input type="text"  name="rolename" required/>
 					</td>
                 </tr>
 
@@ -40,15 +64,16 @@
                     <td>菜单资源<span style="color:red">*</span>：</td>
                     <td>
 						<ul>
-                        	<li><input type="checkbox" name="menu"  />权限管理
-                            	<ul>
-                                	<li>&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="menu"  />人员管理</li>
-                                    <li>&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="menu"  />角色管理</li>
-                                    <li>&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="menu"  />菜单管理</li>
-                                </ul>
-                            </li>
-                            <li><input type="checkbox" name="menu"  />个人中心</li>
-                            <li><input type="checkbox" name="menu"  />教务中心</li>
+                            <c:forEach items="${menuList}" var="m">
+                                <li>
+                                    <input type="checkbox" name="menuid" class="pMenu" value="${m.menuid}" />${m.menuname}
+                                    <ul>
+                                        <c:forEach items="${m.subMenus}" var="sub">
+                                            <li>&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="menuid" class="sMenu" value="${sub.menuid}" />${sub.menuname}</li>
+                                        </c:forEach>
+                                    </ul>
+                                </li>
+                            </c:forEach>
                         </ul>
 					</td>
                 </tr>
