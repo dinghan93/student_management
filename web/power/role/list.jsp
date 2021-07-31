@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>
 	学生信息管理平台
@@ -15,8 +15,10 @@
     <script src="../../Script/Data.js" type="text/javascript"></script>
     <script src="../../Script/myJs.js" type="text/javascript"></script>
     <script>
-	function del(){
-		confirm("确认删除？");
+	function del(roleid){
+		if(confirm("确认删除？")){
+            location.href="/power/role/roleOperation?method=delete&roleid="+roleid;
+        }
 	}
 
 </script>
@@ -76,10 +78,10 @@
                        </td>
 
                        <td>&nbsp;
-                           <a href="javascript:alert('操作成功！');">启用</a>
+                           <a href="/power/role/roleOperation?method=enable&roleid=${r.roleid}&index=${p3.pageIndex}">启用</a>
                            <a href="/power/role/roleOperation?method=showInfo&roleid=${r.roleid}">详情</a>
                            <a href="/power/role/roleOperation?method=update&roleid=${r.roleid}">修改</a>
-                           <a href="javascript:void(0)" onclick="del();return false" class="tablelink"> 删除</a>
+                           <a name="delete" class="tablelink" href="#" onclick="del(${r.roleid})"> 删除</a>
                        </td>
                    </tr>
                </c:forEach>

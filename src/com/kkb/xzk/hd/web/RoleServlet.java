@@ -42,9 +42,41 @@ public class RoleServlet extends HttpServlet {
             update(req, resp);
         }else if("submitUpdate".equals(method)){
             submitUpdate(req, resp);
+        }else if("enable".equals(method)){
+            enable(req, resp);
+        }else if("delete".equals(method)){
+            delete(req, resp);
         }
     }
 
+    protected void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Integer roleid = Integer.parseInt(req.getParameter("roleid"));
+
+        boolean f = roleService.deleteRole(roleid);
+
+        resp.setContentType("text/html;charset=utf-8");
+        PrintWriter pw = resp.getWriter();
+        if(f){
+            pw.println("<script>alert('删除成功！');location.href='/power/role/roleOperation?method=getAll'</script>");
+        }else{
+            pw.println("<script>alert('删除失败！');location.href='/power/role/roleOperation?method=getAll'</script>");
+        }
+    }
+
+    protected void enable(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Integer roleid = Integer.parseInt(req.getParameter("roleid"));
+        String pageIndex = req.getParameter("index");
+
+        boolean f = roleService.enableRole(roleid);
+
+        resp.setContentType("text/html;charset=utf-8");
+        PrintWriter pw = resp.getWriter();
+        if(f){
+            pw.println("<script>alert('启用成功！');location.href='/power/role/roleOperation?method=getAll&index="+pageIndex+"'</script>");
+        }else{
+            pw.println("<script>alert('启用失败！');location.href='/power/role/roleOperation?method=getAll&index="+pageIndex+"'</script>");
+        }
+    }
     protected void submitUpdate(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer roleid = Integer.parseInt(req.getParameter("roleid"));
         String rolename = req.getParameter("rolename");

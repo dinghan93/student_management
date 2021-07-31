@@ -34,4 +34,12 @@ public interface UsersDao {
     List<Role> getRoleList();
 
     int addUsers(Users u);
+
+    Users getUsersById(int userid);
+
+    boolean updateUsers(Users u);
+
+    boolean delete(int userid);
+
+    int deleteBatches(String[] userids);
 }

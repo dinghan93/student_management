@@ -81,14 +81,14 @@ public class RoleDaoImpl extends DBUtils implements RoleDao {
 
     @Override
     public Role getRoleById(int roleid) {
+        Role role = new Role();
+        try {
         String sql = "select rolename, rolestate, menuid from role left join middle on role.roleid=middle.roleid where role.roleid=?";
         List params = new ArrayList();
         params.add(roleid);
         resultSet = query(sql, params);
         MenuDao menuDao = new MenuDaoImpl();
         List<Menu> menuList = new ArrayList<>();
-        Role role = new Role();
-        try {
             while(resultSet.next()){
                 if(role.getRoleid()==null) {
                     role.setRoleid(roleid);
@@ -97,13 +97,14 @@ public class RoleDaoImpl extends DBUtils implements RoleDao {
                 }
                 int menuid = resultSet.getInt("menuid");
                 menuList.add(menuDao.getMenuById(menuid));
+                role.setMenuList(menuList);
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
             closeAll();
         }
-        role.setMenuList(menuList);
+
         return role;
     }
 
@@ -128,5 +129,37 @@ public class RoleDaoImpl extends DBUtils implements RoleDao {
             closeAll();
         }
         return 0;
+    }
+
+    @Override
+    public boolean enableRole(int roleid) {
+        try {
+            String sql = "update role set rolestate=1 where roleid=?";
+            List params = new ArrayList();
+            params.add(roleid);
+            update(sql, params);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            closeAll();
+        }
+    }
+
+    @Override
+    public boolean deleteRole(int roleid) {
+        try {
+            String sql = "delete from role where roleid=?";
+            List params = new ArrayList();
+            params.add(roleid);
+            update(sql, params);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            closeAll();
+        }
     }
 }

@@ -16,4 +16,6 @@ public interface MiddleDao {
      * @return 1：表示插入成功。0：表示插入失败
      **/
     int insertMiddle(int roleid, String[] menuids);
+
+    boolean delete(int roleid);
 }

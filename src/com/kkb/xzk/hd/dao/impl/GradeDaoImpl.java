@@ -5,6 +5,7 @@ import com.kkb.xzk.hd.dao.GradeDao;
 import com.kkb.xzk.hd.util.DBUtils;
 import com.kkb.xzk.hd.util.ResultSetUtil;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,10 +18,16 @@ import java.util.List;
 public class GradeDaoImpl extends DBUtils implements GradeDao {
     @Override
     public List<Grade> getAllGrades() {
-        String sql = "select * from grade";
-        resultSet = query(sql, null);
-        List<Grade> grades = ResultSetUtil.getResults(resultSet, Grade.class);
-        closeAll();
+        List<Grade> grades = null;
+        try {
+            String sql = "select * from grade";
+            resultSet = query(sql, null);
+            grades = ResultSetUtil.getResults(resultSet, Grade.class);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            closeAll();
+        }
         return grades;
     }
 }

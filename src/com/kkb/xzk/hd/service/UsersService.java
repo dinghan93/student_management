@@ -25,4 +25,18 @@ public interface UsersService {
     List<Role> getRoleList();
 
     int addUsers(Users u);
+    /**
+     * 根据用户id查找用户。这里一定还要给用户对象的role属性赋值
+     * @author
+     * @date 2021/7/31
+     * @param userid
+     * @return
+     **/
+    Users getUsersById(int userid);
+
+    boolean updateUsers(Users u);
+
+    boolean delete(int userid);
+
+    int deleteBatch(String[] userids);
 }

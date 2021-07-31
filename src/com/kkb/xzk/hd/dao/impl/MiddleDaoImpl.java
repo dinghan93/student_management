@@ -36,4 +36,20 @@ public class MiddleDaoImpl extends DBUtils implements MiddleDao {
         }
         return count;
     }
+
+    @Override
+    public boolean delete(int roleid) {
+        try {
+            String sql = "delete from middle where roleid=?";
+            List params = new ArrayList();
+            params.add(roleid);
+            update(sql, params);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            closeAll();
+        }
+    }
 }

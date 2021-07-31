@@ -33,7 +33,7 @@
                 <tr  width="120px;">
                     <td width="120px">用户名<span style="color:red">*</span>：</td>
                     <td>
-						<input type="text"  name="loginname" value="杨XX" required/>
+						<input type="text"  name="loginname" value="" required/>
 					</td>
                 </tr>
 
@@ -47,7 +47,7 @@
                 <tr  width="120px;">
                     <td>姓名<span style="color:red">*</span>：</td>
                     <td>
-						<input type="text"  name="realname" value="杨XX" required/>
+						<input type="text"  name="realname" value="" required/>
 					</td>
                 </tr>
                 <tr>

@@ -47,10 +47,7 @@ public class RoleServiceImpl implements RoleService {
         return roleDao.getRoleById(roleid);
     }
 
-    @Override
-    public int deleteRoleById(int roleid) {
-        return roleDao.deleteRowById(roleid);
-    }
+
 
     @Override
     public int updateRole(int roleid, String rolename, int state, String[] menuids) {
@@ -60,5 +57,19 @@ public class RoleServiceImpl implements RoleService {
             return 0;
         }
         return addRole(roleid, rolename, state, menuids);
+    }
+
+    @Override
+    public boolean enableRole(int roleid) {
+        return roleDao.enableRole(roleid);
+    }
+
+    @Override
+    public boolean deleteRole(int roleid) {
+        // 删除users表中的数据
+        boolean f1 = middleDao.delete(roleid);
+        // 删除middle表中的数据
+        boolean f2 = roleDao.deleteRole(roleid);
+        return f1&&f2;
     }
 }

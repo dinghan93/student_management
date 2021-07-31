@@ -20,52 +20,59 @@ import static com.kkb.xzk.hd.util.StudentStateEnum.DELETED;
 public class StudentDaoImpl extends DBUtils implements StudentDao {
     @Override
     public List<Student> getAllStudents(String stuno, String stuname, int sex, int pageIndex, int pageSize) {
-        List<Student> students = new ArrayList<Student>();
-        String sql = "select * from student where 1=1 and state!=" + DELETED.type + " ";
-        List<Object> params = new ArrayList<>();
-        if(stuno != null && ! "".equals(stuno)){
-            sql += " and stuno=? ";
-            params.add(stuno);
-        }
-        if(stuname != null && ! "".equals(stuname)){
-            sql += " and stuname like ? ";
-            params.add("%"+stuname+"%");
-        }
-        if(sex != -1){
-            sql += " and sex=? ";
-            params.add(sex);
-        }
-        sql += " limit ?, ?";
-        params.add((pageIndex-1) * pageSize);
-        params.add(pageSize);
+        try {
+            List<Student> students = new ArrayList<Student>();
+            String sql = "select * from student where 1=1 and state!=" + DELETED.type + " ";
+            List<Object> params = new ArrayList<>();
+            if(stuno != null && ! "".equals(stuno)){
+                sql += " and stuno=? ";
+                params.add(stuno);
+            }
+            if(stuname != null && ! "".equals(stuname)){
+                sql += " and stuname like ? ";
+                params.add("%"+stuname+"%");
+            }
+            if(sex != -1){
+                sql += " and sex=? ";
+                params.add(sex);
+            }
+            sql += " limit ?, ?";
+            params.add((pageIndex-1) * pageSize);
+            params.add(pageSize);
 
-        System.out.println(sql);
-        resultSet = query(sql, params);
-        students = ResultSetUtil.getResults(resultSet, Student.class);
-        closeAll();
-        return students;
+            System.out.println(sql);
+            resultSet = query(sql, params);
+            students = ResultSetUtil.getResults(resultSet, Student.class);
+            return students;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            closeAll();
+        }
+        return null;
     }
 
     @Override
     public int getNum(String stuno, String stuname, int sex) {
-        String sql = "select count(*) from student where 1=1 and state!=" + DELETED.type + " ";
-        List<Object> params = new ArrayList<>();
-        if(stuno != null && ! "".equals(stuno)){
-            sql += " and stuno=? ";
-            params.add(stuno);
-        }
-        if(stuname != null && ! "".equals(stuname)){
-            sql += " and stuname like ? ";
-            params.add("%"+stuname+"%");
-        }
-        if(sex != -1){
-            sql += " and sex=? ";
-            params.add(sex);
-        }
-        System.out.println(sql);
-        resultSet = query(sql, params);
         int result = 0;
         try {
+            String sql = "select count(*) from student where 1=1 and state!=" + DELETED.type + " ";
+            List<Object> params = new ArrayList<>();
+            if(stuno != null && ! "".equals(stuno)){
+                sql += " and stuno=? ";
+                params.add(stuno);
+            }
+            if(stuname != null && ! "".equals(stuname)){
+                sql += " and stuname like ? ";
+                params.add("%"+stuname+"%");
+            }
+            if(sex != -1){
+                sql += " and sex=? ";
+                params.add(sex);
+            }
+            System.out.println(sql);
+            resultSet = query(sql, params);
+
             while(resultSet.next()){
                 result = resultSet.getInt(1);
             }

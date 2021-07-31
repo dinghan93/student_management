@@ -17,11 +17,7 @@ import java.util.List;
  */
 public class Test{
     public static void main(String[] args) {
-        StudentDao sd = new StudentDaoImpl();
-        List<Student> students = sd.getAllStudents(null, null, -1, 1,5);
-        for (Student student : students) {
-            System.out.println(student);
-        }
+
     }
 }
 

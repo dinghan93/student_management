@@ -16,19 +16,34 @@
     <script src="../../Script/myJs.js" type="text/javascript"></script>
     <script>
 		function del(){
-			confirm("确定删除？");
+			return confirm("确定删除？");
 		}
+		$(function (){
+            $("#go").click(function (){
+                var index = $("#pageSearch").val();
+                index = (index==null || index=="") ? 1 : parseInt(index);
+                index = isNaN(index) ? 1 : index;
+                index = index<1 ? 1 : index;
+                index = index>${p2.totalPages} ? ${p2.totalPages} : index;
+                location.href = '/power/user/usersOperation?method=getAll&index=' + index;
+            });
+
+            $("#dellink").click(function(){
+                $("#myform").submit();
+            });
+        });
 	</script>
 
 </head>
 <body>
 
+<form id="myform" action="/power/user/usersOperation?method=deleteBatch" method="post">
 
 <div class="div_head" style="width: 100%;text-align:center;">
 		<span> <span style="float:left">当前位置是：权限管理-》人员管理</span> <span
 			style="float:right;margin-right: 8px;font-weight: bold">
           
-            <a style="text-decoration: none;" href="javascript:alert('操作成功！');">【批量删除】</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            <a id="dellink" style="text-decoration: none;" href="#">【批量删除】</a>&nbsp;&nbsp;&nbsp;&nbsp;
             <a style="text-decoration: none;" href="/power/user/usersOperation?method=showRoleList">【新增人员】</a>&nbsp;&nbsp;&nbsp;&nbsp;
 		</span>
 		</span>
@@ -67,7 +82,7 @@
                
                 <c:forEach items="${p2.dataList}" var="u" varStatus="sta">
                     <tr align="center">
-                        <th><input type="checkbox" name="one"/></th>
+                        <th><input type="checkbox" name="one" value="${u.userid}" /></th>
                         <td>
                             ${sta.count}
                         </td>
@@ -76,7 +91,7 @@
                             ${u.loginname}
                         </td>
                         <td>
-                            <a href="info.jsp">${u.realname}</a>
+                            <a href="/power/user/usersOperation?method=showRoleList&next=info&userid=${u.userid}">${u.realname}</a>
                         </td>
 
                         <td>&nbsp;
@@ -84,8 +99,8 @@
                         </td>
 
                         <td>&nbsp;
-                            <a href="edit.jsp">修改</a>
-                            <a href="javascript:void(0)" onclick="del();return false" class="tablelink"> 删除</a>
+                            <a href="/power/user/usersOperation?method=showRoleList&next=edit&userid=${u.userid}">修改</a>
+                            <a href="/power/user/usersOperation?method=delete&userid=${u.userid}" onclick="return del();" class="tablelink"> 删除</a>
                         </td>
                     </tr>
                 </c:forEach>
@@ -115,18 +130,28 @@
               <div class=''>每页<b>${p2.pageSize}</b>条数据</div>
               <div class=''><b>${p2.pageIndex}</b>/${p2.totalPages}</div>
               <div class='SearchStyle'>
-                  <input type='text' id='john_Page_Search' onkeydown="if(event.keyCode == 13){page_searchIndex();}"/>
+                  <input type='text' id='pageSearch' onkeydown="if(event.keyCode == 13){page_searchIndex();}"/>
               </div>
               <div class=''>
-                  <input type='button' value='Go' onclick="page_searchIndex()"/></div>
+                  <input id="go" type='button' value='Go' /></div>
           </div>
-     <script>    function page_searchIndex(){        var searchText = document.getElementById('john_Page_Search');        var searchIndex = searchText != null && searchText.value != '' ? parseInt(searchText.value) : 0;        if(searchIndex > 0 && searchIndex <= 3) {             window.location='StudentMaterial.aspx?page=' + searchIndex;        }        else        {            alert('需要跳转的页码不能超出范围！');        }    }</script>
-        </div>
+     <script>
+         function page_searchIndex() {
+             var searchText = document.getElementById('john_Page_Search');
+             var searchIndex = searchText != null && searchText.value != '' ? parseInt(searchText.value) : 0;
+             if (searchIndex > 0 && searchIndex <= 3) {
+                 window.location = 'StudentMaterial.aspx?page=' + searchIndex;
+             } else {
+                 alert('需要跳转的页码不能超出范围！');
+             }
+         }
+     </script>
+ </div>
     </div>
 
-        
-        
+
       
     </div>
+</form>
 </body>
 </html>

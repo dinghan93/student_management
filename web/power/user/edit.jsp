@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>
 	学生信息管理平台
@@ -27,43 +28,44 @@
         </div>
 </div>
 <div class="cztable">
-	<form action="list.jsp" method="post">
+	<form action="/power/user/usersOperation?method=edit" method="post">
+        <input type="hidden" name="userid" value="${users.userid}">
 <table border="1" width="100%" class="table_a">
                 <tr  width="120px;">
                     <td width="120px">用户名：<span style="color:red">*</span>：</td>
                     <td>
-						<input type="text"  name="f_goods_image" value="杨XX" />
+						<input type="text"  name="loginname" value="${users.loginname}" required />
 					</td>
                 </tr>
 
 				<tr  width="120px;">
                     <td>密码：<span style="color:red">*</span>：</td>
                     <td>
-						<input type="password"  name="f_goods_image" value="杨XX" />
+						<input type="password"  name="password" value="${users.password}" required />
 					</td>
                 </tr>
 
                 <tr  width="120px;">
                     <td>姓名<span style="color:red">*</span>：</td>
                     <td>
-						<input type="text"  name="f_goods_image" value="杨XX" />
+						<input type="text"  name="realname" value="${users.realname}" required/>
 					</td>
                 </tr>
                 <tr>
                     <td>性别<span style="color:red">*</span>：</td>
                     <td>
-                        <input type="radio" name="gender" checked value="1" />男 <input type="radio" name="gender" value="0"/>女
+                        <input type="radio" name="sex" ${users.sex==1?'checked':''} value="1" />男
+                        <input type="radio" name="sex" ${users.sex==0?'checked':''} value="0"/>女
                     </td>
                 </tr>
 
 				<tr>
                     <td>角色：<span style="color:red">*</span>：</td>
                     <td>
-                        <select>
-							<option>--请选择--</option>
-							<option>管理员</option>
-							<option>主任</option>
-							<option>老师</option>
+                        <select name="roleid">
+                            <c:forEach items="${roleList}" var="r">
+                                <option value="${r.roleid}" ${users.role.roleid==r.roleid?'selected':''}>${r.rolename}</option>
+                            </c:forEach>
 						</select>
                     </td>
                 </tr>
@@ -71,28 +73,28 @@
 				<tr>
                     <td>EMAIL：</td>
                     <td>
-                        <input type="text" name="f_goods_image" value="1332@126.com" />
+                        <input type="text" name="email" value="${users.email}" />
                     </td>                
                 </tr>
 
 				<tr>
                     <td>联系电话：</td>
                     <td>
-                        <input type="text" name="f_goods_image" value="13333333333" />
+                        <input type="text" name="phone" value="${users.phone}" />
                     </td>                
                 </tr>
 
 				<tr>
                     <td>住址：</td>
                     <td>
-                        <input type="text" name="f_goods_image" value="朝阳" />
+                        <input type="text" name="address" value="${users.address}" />
                     </td>                
                 </tr>
 				              
 				<tr>
                     <td>身份证号：</td>
                     <td>
-                        <input type="text" name="f_goods_image" value="110111111111111111111" />
+                        <input type="text" name="cardid" value="${users.cardid}" />
                     </td>                
                 </tr>
 				
@@ -100,7 +102,7 @@
 				<tr>
                     <td>简介<span style="color:red">*</span>：</td>
                     <td>
-                        <textarea>一个新开辟领域的探讨，探讨摸索</textarea>
+                        <textarea name="desc">${users.desc}</textarea>
                     </td>
                 </tr>
 				<tr>

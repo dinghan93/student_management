@@ -52,57 +52,37 @@ public class DBUtils {
 
 
     //3.获得链接
-    protected  Connection getConnection(){
-        try {
-            connection=dataSource.getConnection();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+    protected  Connection getConnection() throws SQLException {
+        connection=dataSource.getConnection();
         return connection;
     }
     //4.得到预状态通道
-    protected  PreparedStatement getPps(String sql){
-        try {
-            pps= getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+    protected  PreparedStatement getPps(String sql) throws SQLException {
+        pps= getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         return pps;
     }
     //5.绑定参数  List保存的是给占位符所赋的值
-    protected  void param(List list){
+    protected  void param(List list) throws SQLException {
              if(list!=null&&list.size()>0){
                  for (int i=0;i<list.size();i++) {
-                     try {
-                         pps.setObject(i+1,list.get(i));
-                     } catch (SQLException throwables) {
-                         throwables.printStackTrace();
-                     }
+                     pps.setObject(i+1,list.get(i));
                  }
              }
     }
 
     //6.执行操作(增删改+查询)
-    protected  int  update(String sql,List list){
+    protected  int  update(String sql,List list) throws SQLException {
         getPps(sql);
         param(list);
-        try {
-            count= pps.executeUpdate();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+        count= pps.executeUpdate();
         return count;
     }
 
     //7.查询
-    protected  ResultSet query(String sql,List list){
+    protected  ResultSet query(String sql,List list) throws SQLException {
         getPps(sql);
         param(list);
-        try {
-            resultSet= pps.executeQuery();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+        resultSet= pps.executeQuery();
         return resultSet;
     }
 
