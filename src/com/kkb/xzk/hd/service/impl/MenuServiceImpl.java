@@ -7,7 +7,6 @@ import com.kkb.xzk.hd.dao.impl.MenuDaoImpl;
 import com.kkb.xzk.hd.dao.impl.MiddleDaoImpl;
 import com.kkb.xzk.hd.service.MenuService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,29 +18,31 @@ import java.util.List;
 public class MenuServiceImpl implements MenuService {
     MenuDao menuDao = new MenuDaoImpl();
     MiddleDao middleDao = new MiddleDaoImpl();
+
     @Override
     public List<Menu> getMenuList() {
         List<Menu> oriMenuList = menuDao.getMenuList();
-        List<Menu> newMenuList = new ArrayList<>(); //分级后的菜单集合。该集合里只保存一级菜单
-        for (Menu menu : oriMenuList) {
-            if(menu.getUpmenuid()==0){ //说明是一级菜单
-                List<Menu> subMenus = new ArrayList<>();
-                for (Menu menu1 : oriMenuList) {
-                    if(menu1.getUpmenuid()==menu.getMenuid()){
-                        subMenus.add(menu1);
-                    }
-                }
-                menu.setSubMenus(subMenus);
-                newMenuList.add(menu);
-            }
-        }
-        return newMenuList;
+//        List<Menu> newMenuList = new ArrayList<>(); //分级后的菜单集合。该集合里只保存一级菜单
+//        for (Menu menu : oriMenuList) {
+//            if (menu.getUpmenuid() == 0) { //说明是一级菜单
+//                List<Menu> subMenus = new ArrayList<>();
+//                for (Menu menu1 : oriMenuList) {
+//                    if (menu1.getUpmenuid() == menu.getMenuid()) {
+//                        subMenus.add(menu1);
+//                    }
+//                }
+//                menu.setSubMenus(subMenus);
+//                newMenuList.add(menu);
+//            }
+//        }
+        return menuDao.toHierarchical(oriMenuList);
     }
 
     @Override
     public List<Menu> getMenuList(int pageIndex, int pageSize) {
         return menuDao.getMenuList(pageIndex, pageSize);
     }
+
 
     @Override
     public int total() {
@@ -77,12 +78,12 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public boolean deleteBatch(String[] menuids) {
-        if(menuids==null || menuids.length==0){
+        if (menuids == null || menuids.length == 0) {
             return false;
         }
 
         int i = middleDao.deleteBatch(menuids);
         int j = menuDao.deleteBatch(menuids);
-        return (i!=0 || j!=0);
+        return (i != 0 || j != 0);
     }
 }

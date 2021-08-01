@@ -30,6 +30,7 @@ public class MenuDaoImpl extends DBUtils implements MenuDao {
         }
         return null;
     }
+
     @Override
     public Menu getMenuById(int menuid) {
         try {
@@ -38,7 +39,7 @@ public class MenuDaoImpl extends DBUtils implements MenuDao {
             params.add(menuid);
             resultSet = query(sql, params);
             List<Menu> menuList = ResultSetUtil.getResults(resultSet, Menu.class);
-            if(menuList.size()==0){
+            if (menuList.size() == 0) {
                 return null;
             }
             return menuList.get(0);
@@ -55,7 +56,7 @@ public class MenuDaoImpl extends DBUtils implements MenuDao {
         try {
             String sql = "select * from menu limit ?,?";
             List params = new ArrayList();
-            params.add((pageIndex-1)*pageSize);
+            params.add((pageIndex - 1) * pageSize);
             params.add(pageSize);
             resultSet = query(sql, params);
             List<Menu> menuList = ResultSetUtil.getResults(resultSet, Menu.class);
@@ -74,7 +75,7 @@ public class MenuDaoImpl extends DBUtils implements MenuDao {
         try {
             String sql = "select count(*) from menu";
             resultSet = query(sql, null);
-            if(resultSet.next()){
+            if (resultSet.next()) {
                 count = resultSet.getInt(1);
             }
         } catch (Exception e) {
@@ -159,7 +160,7 @@ public class MenuDaoImpl extends DBUtils implements MenuDao {
 
     @Override
     public int deleteBatch(String[] menuids) {
-        if(menuids==null || menuids.length==0){
+        if (menuids == null || menuids.length == 0) {
             return 0;
         }
         int count = 0;
@@ -180,5 +181,26 @@ public class MenuDaoImpl extends DBUtils implements MenuDao {
             closeAll();
         }
         return count;
+    }
+
+    @Override
+    public List<Menu> toHierarchical(List<Menu> menuList) {
+        if (menuList == null || menuList.size() == 0) {
+            return menuList;
+        }
+        List<Menu> newMenuList = new ArrayList<>(); //分级后的菜单集合。该集合里只保存一级菜单
+        for (Menu menu : menuList) {
+            if (menu.getUpmenuid() == 0) { //说明是一级菜单
+                List<Menu> subMenus = new ArrayList<>();
+                for (Menu menu1 : menuList) {
+                    if (menu1.getUpmenuid() == menu.getMenuid()) {
+                        subMenus.add(menu1);
+                    }
+                }
+                menu.setSubMenus(subMenus);
+                newMenuList.add(menu);
+            }
+        }
+        return newMenuList;
     }
 }

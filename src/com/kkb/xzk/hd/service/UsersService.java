@@ -13,24 +13,30 @@ import java.util.List;
  */
 public interface UsersService {
     Users getUsers(String username, String password);
+
     List<Users> getAllUsers(int pageIndex, int pageSize);
+
     /**
      * 得到总查询数量
+     *
+     * @return
      * @author
      * @date 2021/7/29
-     * @return
      **/
     int getAllUsersCount();
 
     List<Role> getRoleList();
 
+
     int addUsers(Users u);
+
     /**
      * 根据用户id查找用户。这里一定还要给用户对象的role属性赋值
-     * @author
-     * @date 2021/7/31
+     *
      * @param userid
      * @return
+     * @author
+     * @date 2021/7/31
      **/
     Users getUsersById(int userid);
 

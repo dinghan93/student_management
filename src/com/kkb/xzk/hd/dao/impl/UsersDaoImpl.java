@@ -6,7 +6,6 @@ import com.kkb.xzk.hd.dao.UsersDao;
 import com.kkb.xzk.hd.util.DBUtils;
 import com.kkb.xzk.hd.util.ResultSetUtil;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,11 +28,11 @@ public class UsersDaoImpl extends DBUtils implements UsersDao {
             params.add(password);
             query(sql, params);
 
-            if(resultSet == null){
+            if (resultSet == null) {
                 return null;
             }
 
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 u = new Users();
                 u.setLoginname(username);
                 u.setUserid(resultSet.getInt("userid"));
@@ -50,7 +49,7 @@ public class UsersDaoImpl extends DBUtils implements UsersDao {
 
     @Override
     public List<Users> getAllUsers(int pageIndex, int pageSize) {
-        int start = (pageIndex-1)*pageSize;
+        int start = (pageIndex - 1) * pageSize;
         List<Users> userList = new ArrayList<>();
         List params = new ArrayList();
         String sql = "select userid, loginname, realname, rolename from users LEFT JOIN role ON users.roleid=role.roleid limit ?,?";
@@ -58,7 +57,7 @@ public class UsersDaoImpl extends DBUtils implements UsersDao {
         params.add(pageSize);
         try {
             resultSet = query(sql, params);
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 Users u = new Users();
                 u.setLoginname(resultSet.getString("loginname"));
                 u.setRealname(resultSet.getString("realname"));
@@ -82,7 +81,7 @@ public class UsersDaoImpl extends DBUtils implements UsersDao {
         int count = 0;
         try {
             resultSet = query(sql, null);
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 count = resultSet.getInt(1);
             }
         } catch (SQLException throwables) {
@@ -131,9 +130,9 @@ public class UsersDaoImpl extends DBUtils implements UsersDao {
         int i = 0;
         try {
             i = update(sql, params);
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally{
+        } finally {
             closeAll();
         }
         return i;
@@ -147,7 +146,7 @@ public class UsersDaoImpl extends DBUtils implements UsersDao {
             params.add(userid);
             resultSet = query(sql, params);
             List<Users> l = ResultSetUtil.getResults(resultSet, Users.class);
-            return (l==null || l.size()==0) ? null : l.get(0);
+            return (l == null || l.size() == 0) ? null : l.get(0);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
             return null;
@@ -202,7 +201,7 @@ public class UsersDaoImpl extends DBUtils implements UsersDao {
 
     @Override
     public int deleteBatches(String[] userids) {
-        if(userids==null || userids.length==0){
+        if (userids == null || userids.length == 0) {
             return 0;
         }
         int count = 0;

@@ -1,9 +1,12 @@
 package com.kkb.xzk.hd.service.impl;
 
+import com.kkb.xzk.hd.bean.Menu;
 import com.kkb.xzk.hd.bean.Role;
 import com.kkb.xzk.hd.bean.Users;
+import com.kkb.xzk.hd.dao.MenuDao;
 import com.kkb.xzk.hd.dao.RoleDao;
 import com.kkb.xzk.hd.dao.UsersDao;
+import com.kkb.xzk.hd.dao.impl.MenuDaoImpl;
 import com.kkb.xzk.hd.dao.impl.RoleDaoImpl;
 import com.kkb.xzk.hd.dao.impl.UsersDaoImpl;
 import com.kkb.xzk.hd.service.UsersService;
@@ -17,11 +20,21 @@ import java.util.List;
  * @Modified By:
  */
 public class UsersServiceImpl implements UsersService {
-    UsersDao usersDao = new UsersDaoImpl();
-    RoleDao roleDao = new RoleDaoImpl();
+    private UsersDao usersDao = new UsersDaoImpl();
+    private RoleDao roleDao = new RoleDaoImpl();
+    private MenuDao menuDao = new MenuDaoImpl();
+
     @Override
     public Users getUsers(String username, String password) {
-        return usersDao.getUsers(username, password);
+        Users u = usersDao.getUsers(username, password);
+        if (u == null) {
+            return null;
+        }
+        //登录成功，应该保存用户可操作的菜单集合。涉及三表联查
+        u = getUsersById(u.getUserid());
+        List<Menu> menuList = menuDao.toHierarchical(u.getRole().getMenuList());
+        u.getRole().setMenuList(menuList);
+        return u;
     }
 
     @Override
@@ -39,6 +52,7 @@ public class UsersServiceImpl implements UsersService {
         return usersDao.getRoleList();
     }
 
+
     @Override
     public int addUsers(Users u) {
         return usersDao.addUsers(u);
@@ -47,8 +61,9 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public Users getUsersById(int userid) {
         Users u = usersDao.getUsersById(userid);
-        if(u != null){
-            u.setRole(roleDao.getRoleById(u.getRoleid()));
+        if (u != null) {
+            Role role = roleDao.getRoleById(u.getRoleid());
+            u.setRole(role);
         }
         return u;
     }

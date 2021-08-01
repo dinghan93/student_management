@@ -2,7 +2,6 @@ package com.kkb.xzk.hd.dao.impl;
 
 import com.kkb.xzk.hd.bean.Menu;
 import com.kkb.xzk.hd.bean.Role;
-import com.kkb.xzk.hd.bean.Users;
 import com.kkb.xzk.hd.dao.MenuDao;
 import com.kkb.xzk.hd.dao.RoleDao;
 import com.kkb.xzk.hd.util.DBUtils;
@@ -23,7 +22,7 @@ public class RoleDaoImpl extends DBUtils implements RoleDao {
 
     @Override
     public List<Role> getRoleList(int pageIndex, int pageSize) {
-        int start = (pageIndex-1)*pageSize;
+        int start = (pageIndex - 1) * pageSize;
         List<Role> roleList = new ArrayList<>();
         List params = new ArrayList();
         String sql = "select * from role limit ?,?";
@@ -46,7 +45,7 @@ public class RoleDaoImpl extends DBUtils implements RoleDao {
         int count = 0;
         try {
             resultSet = query(sql, null);
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 count = resultSet.getInt(1);
             }
         } catch (SQLException throwables) {
@@ -59,7 +58,8 @@ public class RoleDaoImpl extends DBUtils implements RoleDao {
 
     @Override
     public int addRole(Role role) {
-        int key = 0;;
+        int key = 0;
+        ;
         try {
             String sql = "insert into role(roleid, rolename, rolestate) values(?,?,?)";
             List params = new ArrayList();
@@ -68,7 +68,7 @@ public class RoleDaoImpl extends DBUtils implements RoleDao {
             params.add(role.getRolestate());
             int k = update(sql, params);
             ResultSet rs = pps.getGeneratedKeys();
-            if(rs.next()){
+            if (rs.next()) {
                 key = rs.getInt(1);
             }
         } catch (SQLException throwables) {
@@ -83,22 +83,22 @@ public class RoleDaoImpl extends DBUtils implements RoleDao {
     public Role getRoleById(int roleid) {
         Role role = new Role();
         try {
-        String sql = "select rolename, rolestate, menuid from role left join middle on role.roleid=middle.roleid where role.roleid=?";
-        List params = new ArrayList();
-        params.add(roleid);
-        resultSet = query(sql, params);
-        MenuDao menuDao = new MenuDaoImpl();
-        List<Menu> menuList = new ArrayList<>();
-            while(resultSet.next()){
-                if(role.getRoleid()==null) {
+            String sql = "select rolename, rolestate, menuid from role left join middle on role.roleid=middle.roleid where role.roleid=?";
+            List params = new ArrayList();
+            params.add(roleid);
+            resultSet = query(sql, params);
+            MenuDao menuDao = new MenuDaoImpl();
+            List<Menu> menuList = new ArrayList<>();
+            while (resultSet.next()) {
+                if (role.getRoleid() == null) {
                     role.setRoleid(roleid);
                     role.setRolename(resultSet.getString("rolename"));
                     role.setRolestate(resultSet.getInt("rolestate"));
                 }
                 int menuid = resultSet.getInt("menuid");
                 menuList.add(menuDao.getMenuById(menuid));
-                role.setMenuList(menuList);
             }
+            role.setMenuList(menuList);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
@@ -118,9 +118,9 @@ public class RoleDaoImpl extends DBUtils implements RoleDao {
 
             sql = "delete from middle where roleid=?";
             int k = update(sql, params);
-            if(i > 0 || k > 0){
+            if (i > 0 || k > 0) {
                 return 1;
-            }else{
+            } else {
                 return 0;
             }
         } catch (Exception e) {

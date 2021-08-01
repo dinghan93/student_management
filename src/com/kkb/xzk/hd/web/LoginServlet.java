@@ -20,16 +20,17 @@ import java.io.PrintWriter;
  */
 @WebServlet(urlPatterns = "/login")
 public class LoginServlet extends HttpServlet {
+
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         UsersService usersService = new UsersServiceImpl();
         Users u = usersService.getUsers(username, password);
-        if(u != null){
-            req.getSession().setAttribute("u1",u);
+        if (u != null) {
+            req.getSession().setAttribute("u1", u);
             resp.sendRedirect("index.jsp");
-        }else{
+        } else {
             resp.setContentType("text/html;charset=utf-8");
             PrintWriter pw = resp.getWriter();
             pw.println("<script>location.href='login.jsp';alert('用户名或密码输入错误');</script>");
