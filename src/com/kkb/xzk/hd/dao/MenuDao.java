@@ -12,6 +12,14 @@ import java.util.List;
  */
 public interface MenuDao {
     List<Menu> getMenuList();
-
     Menu getMenuById(int menuid);
+
+    List<Menu> getMenuList(int pageIndex, int pageSize);
+    int total();
+    List<Menu> getUpMenuList();
+
+    boolean update(Menu menu);
+    boolean insert(Menu menu);
+    boolean delete(Integer menuid);
+    int deleteBatch(String[] menuids);
 }

@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>
 	学生信息管理平台
@@ -27,22 +28,26 @@
         </div>
 </div>
 <div class="cztable">
-	<form action="list.jsp" method="post">
+	<form action="/power/menu/menuOperation?method=edit" method="post">
+        <input type="hidden" name="menuid" value="${menu.menuid}">
 <table border="1" width="100%" class="table_a">
                 <tr  width="120px;">
                     <td width="120px">资源菜单名：<span style="color:red">*</span>：</td>
                     <td>
-						<input type="text"  name="f_goods_image" value="权限管理" />
+						<input type="text"  name="menuname" value="${menu.menuname}" />
 					</td>
                 </tr>
 
 				<tr  width="120px;">
                     <td>上级菜单：<span style="color:red">*</span>：</td>
                     <td>
-                    	<select>
-                        	<option value="0">顶级菜单</option>
-                            <option value="1">权限管理</option>
-                            
+                    	<select name="upmenuid">
+                            <option ${menu.upmenuid==0?'selected':''} value="0">顶级菜单</option>
+                            <c:forEach items="${upMenuList}" var="upMenu">
+                                <c:if test="${upMenu.menuid!=menu.menuid}">
+                                    <option ${menu.upmenuid==upMenu.menuid?'selected':''} value="${upMenu.menuid}">${upMenu.menuname}</option>
+                                </c:if>
+                            </c:forEach>
                         </select>
 					</td>
                 </tr>
@@ -50,14 +55,15 @@
                 <tr  width="120px;">
                     <td>菜单路径<span style="color:red">*</span>：</td>
                     <td>
-						<input type="text"  name="f_goods_image" value="/info.jsp" />
+						<input type="text"  name="url" value="${menu.url}" />
 					</td>
                 </tr>
                 
                 <tr>
                     <td>启用状态<span style="color:red">*</span>：</td>
                     <td>
-                        <input type="radio" name="state" checked value="1" />启用 <input type="radio" name="state" value="0"/>禁用
+                        <input type="radio" name="state" ${menu.state==1?'checked':''} value="1"/>启用
+                        <input type="radio" name="state" ${menu.state==0?'checked':''} value="0" />禁用
                     </td>
                 </tr>
 
@@ -65,7 +71,7 @@
                 <tr  width="120px;">
                     <td>备注<span style="color:red">*</span>：</td>
                     <td>
-						<textarea rows="5" cols="20"></textarea>
+						<textarea name="desc" rows="5" cols="20">${menu.desc}</textarea>
 					</td>
                 </tr>
 				

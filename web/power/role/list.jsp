@@ -20,6 +20,17 @@
             location.href="/power/role/roleOperation?method=delete&roleid="+roleid;
         }
 	}
+    $(function(){
+        $("#go").click(function (){
+            var index = $("#pageSearch").val();
+            index = (index==null || index=="") ? 1 : parseInt(index);
+            index = isNaN(index) ? 1 : index;
+            index = index<1 ? 1 : index;
+            index = index>${p3.totalPages} ? ${p3.totalPages} : index;
+            location.href = '/power/role/roleOperation?method=getAll&index=' + index;
+        });
+    });
+
 
 </script>
 </head>
@@ -108,7 +119,7 @@
          <div class=''><b>${p3.pageIndex}</b>/${p3.totalPages}</div>
          <div class='SearchStyle'><input type='text' id='john_Page_Search'
                                          onkeydown="if(event.keyCode == 13){page_searchIndex();}"/></div>
-         <div class=''><input type='button' value='Go' onclick="page_searchIndex()"/></div>
+         <div class=''><input type='button' id="go" value='Go'/></div>
      </div>
 
      <script>    function page_searchIndex() {

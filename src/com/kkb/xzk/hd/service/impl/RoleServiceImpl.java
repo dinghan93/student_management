@@ -67,7 +67,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public boolean deleteRole(int roleid) {
         // 删除users表中的数据
-        boolean f1 = middleDao.delete(roleid);
+        boolean f1 = middleDao.deleteByRoleId(roleid);
         // 删除middle表中的数据
         boolean f2 = roleDao.deleteRole(roleid);
         return f1&&f2;

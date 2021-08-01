@@ -18,6 +18,7 @@ public class Menu implements Serializable {
     private String desc;
     private String url;
     private List<Role> roleList; //每个菜单对应一组角色
+    private List<Menu> subMenus; //保存每个菜单下的子菜单集合
 
     public List<Menu> getSubMenus() {
         return subMenus;
@@ -26,8 +27,6 @@ public class Menu implements Serializable {
     public void setSubMenus(List<Menu> subMenus) {
         this.subMenus = subMenus;
     }
-
-    private List<Menu> subMenus; //保存每个菜单下的子菜单集合
 
     public Integer getMenuid() {
         return menuid;

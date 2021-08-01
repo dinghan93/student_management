@@ -17,5 +17,7 @@ public interface MiddleDao {
      **/
     int insertMiddle(int roleid, String[] menuids);
 
-    boolean delete(int roleid);
+    boolean deleteByRoleId(int roleid);
+    boolean deleteByMenuId(Integer menuid);
+    int deleteBatch(String[] menuids);
 }

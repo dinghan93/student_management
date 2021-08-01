@@ -38,7 +38,7 @@ public class MiddleDaoImpl extends DBUtils implements MiddleDao {
     }
 
     @Override
-    public boolean delete(int roleid) {
+    public boolean deleteByRoleId(int roleid) {
         try {
             String sql = "delete from middle where roleid=?";
             List params = new ArrayList();
@@ -51,5 +51,46 @@ public class MiddleDaoImpl extends DBUtils implements MiddleDao {
         } finally {
             closeAll();
         }
+    }
+
+    @Override
+    public boolean deleteByMenuId(Integer menuid) {
+        try {
+            String sql = "delete from middle where menuid=?";
+            List params = new ArrayList();
+            params.add(menuid);
+            update(sql, params);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            closeAll();
+        }
+    }
+
+    @Override
+    public int deleteBatch(String[] menuids) {
+        if(menuids==null || menuids.length==0){
+            return 0;
+        }
+        int count = 0;
+        try {
+            String sql = "delete from middle where menuid=?";
+            pps = getPps(sql);
+            for (String menuid : menuids) {
+                pps.setInt(1, Integer.parseInt(menuid));
+                pps.addBatch();
+            }
+            int[] result = pps.executeBatch();
+            for (int i : result) {
+                count += i;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            closeAll();
+        }
+        return count;
     }
 }

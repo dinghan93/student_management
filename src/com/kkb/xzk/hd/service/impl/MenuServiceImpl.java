@@ -2,7 +2,9 @@ package com.kkb.xzk.hd.service.impl;
 
 import com.kkb.xzk.hd.bean.Menu;
 import com.kkb.xzk.hd.dao.MenuDao;
+import com.kkb.xzk.hd.dao.MiddleDao;
 import com.kkb.xzk.hd.dao.impl.MenuDaoImpl;
+import com.kkb.xzk.hd.dao.impl.MiddleDaoImpl;
 import com.kkb.xzk.hd.service.MenuService;
 
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import java.util.List;
  */
 public class MenuServiceImpl implements MenuService {
     MenuDao menuDao = new MenuDaoImpl();
+    MiddleDao middleDao = new MiddleDaoImpl();
     @Override
     public List<Menu> getMenuList() {
         List<Menu> oriMenuList = menuDao.getMenuList();
@@ -33,5 +36,53 @@ public class MenuServiceImpl implements MenuService {
             }
         }
         return newMenuList;
+    }
+
+    @Override
+    public List<Menu> getMenuList(int pageIndex, int pageSize) {
+        return menuDao.getMenuList(pageIndex, pageSize);
+    }
+
+    @Override
+    public int total() {
+        return menuDao.total();
+    }
+
+    @Override
+    public List<Menu> getUpMenuList() {
+        return menuDao.getUpMenuList();
+    }
+
+    @Override
+    public Menu getMenuById(int menuid) {
+        return menuDao.getMenuById(menuid);
+    }
+
+    @Override
+    public boolean update(Menu menu) {
+        return menuDao.update(menu);
+    }
+
+    @Override
+    public boolean insert(Menu menu) {
+        return menuDao.insert(menu);
+    }
+
+    @Override
+    public boolean delete(Integer menuid) {
+        boolean f1 = middleDao.deleteByMenuId(menuid);
+        boolean f2 = menuDao.delete(menuid);
+        return f1 && f2;
+    }
+
+    @Override
+    public boolean deleteBatch(String[] menuids) {
+        if(menuids==null || menuids.length==0){
+            return false;
+        }
+
+        int i = middleDao.deleteBatch(menuids);
+        int j = menuDao.deleteBatch(menuids);
+        return (i!=0 || j!=0);
     }
 }
